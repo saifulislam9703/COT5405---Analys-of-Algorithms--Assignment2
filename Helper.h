@@ -56,4 +56,26 @@ inline std::string RAND_STRING_GENERATOR(int L, std::mt19937& rng) {
     return s;
 }
 
+// =================== for maximum submatrix problem ===================
+// Generate a random boolean matrix (0s and 1s)
+// zeroProb: probability of a 0 (e.g., 0.5 means ~50% zeros)
+inline vector<vector<uint8_t>> RANDOM_MATRIX(
+    int m, 
+    int n, 
+    double zeroProb, 
+    mt19937& rng) 
+    {
+        uniform_real_distribution<double> dist(0.0, 1.0);
+        vector<vector<uint8_t>> mat(m, vector<uint8_t>(n, 0));
+        for (int i = 0; i < m; ++i) 
+        {
+            for (int j = 0; j < n; ++j) 
+            {
+                mat[i][j] = dist(rng) < zeroProb ? 0 : 1;
+            }
+        }
+
+        return mat;
+    }
+
 #endif
