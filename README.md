@@ -38,6 +38,6 @@ g++ -std=c++17 -O2 DP1.cpp -o DP1.exe
 - **Problem 2**
   ```bash
   g++ -std=c++17 -O2 DP2.cpp -o DP2.exe
-./DP2.exe
+  ./DP2.exe
 ```
 
