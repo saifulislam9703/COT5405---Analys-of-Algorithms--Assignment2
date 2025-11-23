@@ -18,10 +18,11 @@ void dp_update(
     {
         for (int i = 0; i < mat.size(); ++i) {
             for (int j = 0; j < mat[0].size(); ++j) {
-                if (mat[i][j] == 0) {
+                if (mat[i][j] == 0)
+                {
                     if (i==0 || j==0)
                     {
-                        DP[i][j] = 1;
+                        DP[i][j] = 1; // first row/col populate
                     } 
 
                     else 
@@ -29,12 +30,14 @@ void dp_update(
                         DP[i][j] = min({DP[i-1][j], DP[i][j-1], DP[i-1][j-1]}) + 1;
                     }
 
-                    if (DP[i][j] > maxSize) {
+                    if (DP[i][j] > maxSize) 
+                    {
                         maxSize = DP[i][j];
                         max_i = i;
                         max_j = j;
                     }
                 }
+                //ELSE ALREADY SET 0 INITIALLY
             }
         }
     }
@@ -71,7 +74,7 @@ void print_matrix(const vector<vector<uint8_t>>& mat, const Result& result) {
 }
 
 // Synthetic experiment
-void runExperiments() {
+void run_exp() {
     vector<pair<int,int>> sizes =
     {
         {10,10}, 
@@ -86,15 +89,24 @@ void runExperiments() {
     for (auto [m,n] : sizes) {
         cout << "Running experiment: " << m << " x " << n << "\n";
         mt19937 rng(12345);
-        auto B = RANDOM_MATRIX(m, n, 0.6, rng); // 60% 0s, 40% 1s
+        auto mat = RANDOM_MATRIX(m, n, 0.6, rng); // 60% 0s, 40% 1s
+
+        //init memory for the DP method
+
+        size_t DP_size = sizeof(uint8_t) * m * n; // DP matrix size in bytes
+        size_t mat_size = sizeof(uint8_t) * m * n; // input matrix size in bytes
+        size_t total_memory = DP_size + mat_size;
 
         auto start = chrono::high_resolution_clock::now();
-        Result result = largest_square(B);
+        Result result = largest_square(mat);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double> time_taken = end - start;
 
+        //memory usage can be estimated in KB
+
         cout << "Max square size: " << result.maxSize << "\n";
-        cout << "Time taken: " << time_taken.count() << " seconds\n\n";
+        cout << "Time taken: " << time_taken.count() << " seconds\n";
+        cout << "Memory usage: " << total_memory / 1024.0 << " KB\n\n";
     }
 }
 
@@ -112,7 +124,7 @@ int main() {
     print_matrix(mat, res);
 
     // Synthetic experiments
-    runExperiments();
+    run_exp();
 
     return 0;
 }
